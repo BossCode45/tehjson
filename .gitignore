@@ -1,0 +1,8 @@
+.cache
+.clang-format
+.direnv
+build
+compile_commands.json
+include
+json_test
+lib
