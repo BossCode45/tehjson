@@ -1,4 +1,5 @@
 #include <json.hpp>
+#include <tokenizer.h>
 
 #include <iostream>
 #include <memory>
@@ -85,26 +86,29 @@ template <> std::string TehJSON::JSON::serializeData<std::string>(std::shared_pt
 
 int main()
 {
-	TehJSON::JSON json;
+	TehJSON::JSON jsonWriter;
 	// TestClass test1;
 	// json["test1"].set(test1);
-	json["test_string"].set<std::string>("stringy");
-	json["test_int"].set<int>(123);
-	json["test_float"].set<float>(51.8);
-	json["test_object"]["test_int"].set<int>(100);
-	json["test_object"]["test_float"].set<float>(100);
+	jsonWriter["test_string"].set<std::string>("stringy");
+	jsonWriter["test_int"].set<int>(123);
+	jsonWriter["test_float"].set<float>(51.8);
+	jsonWriter["test_object"]["test_int"].set<int>(100);
+	jsonWriter["test_object"]["test_float"].set<float>(100);
 
-	cout << json.getSerialized() << endl;
-	
-	// std::shared_ptr<void> test;
-	// test = std::make_shared<TestClass>(1);
-	// test = std::make_shared<TestClass>(2);
-	// test = std::make_shared<std::string>(std::string("test"));
-	// std::string& testRef = *(std::string*)test.get();
-	// cout << *(std::string*)test.get() << endl;
-	// testRef += " test2";
-	// cout << *(std::string*)test.get() << endl;
-	
-	
-	cout << "abc" << endl;
+	std::string jsonString = jsonWriter.getSerialized();
+	cout << jsonString << endl;
+
+	// TehJSON::Tokenizer tokenizer;
+	// tokenizer.appendInput(jsonString);
+	// std::vector<TehJSON::Token> tokens = tokenizer.tokenize();
+
+	// for(const auto& token : tokens)
+	// {
+	// 	cout << TehJSON::getTokenName(token.type) << ": " << token.content << endl;
+	// }
+
+	TehJSON::JSON jsonReader;
+	cout << "Reading: " << endl;
+	jsonReader.readFromString(jsonString);
+	cout << jsonReader.getSerialized() << endl;
 }

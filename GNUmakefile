@@ -48,7 +48,7 @@ $(OBJS_DIR)/%.o: $(TEST_SRC_DIR)/%.cpp $(TEST_SOURCE) $(TEST_HEADERS)
 
 
 # Phony
-.PHONY: clean
+.PHONY: clean test
 clean:
 	rm -f $(LIB)
 	rm -f $(OBJS_DIR)/*.o
@@ -56,4 +56,5 @@ clean:
 
 test: $(TEST)
 
-$(OBJS_DIR)/json.o: $(SOURCE_DIR)/json.hpp
+$(OBJS_DIR)/json.o: $(SOURCE_DIR)/json.hpp $(SOURCE_DIR)/tokenizer.h
+$(OBJS_DIR)/tokenizer.o: 

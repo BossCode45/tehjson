@@ -1,7 +1,12 @@
+#pragma once
+
+#include "tokenizer.h"
+
 #include <cstddef>
 #include <map>
 #include <memory>
 #include <string>
+#include <vector>
 
 namespace TehJSON
 {
@@ -12,14 +17,19 @@ namespace TehJSON
 		JSON(const JSON& other) = default;
 		~JSON();
 
+		// Writing methods
+		std::string getSerialized();
+		std::string _getSerialized(int currIndent);
+
+		// Reading methods
+		void readFromString(std::string s);
+
 		// Leaf methods
 		template <typename T>
 		T& get();
 		template <typename T>
 		void set(T value);
 		std::string leafType();
-		std::string getSerialized();
-		std::string _getSerialized(int currIndent);
 		template <typename T>
 		static std::string serializeData(std::shared_ptr<void> data);
 
@@ -29,6 +39,14 @@ namespace TehJSON
 		// std::vector<std::string> childNames();
 	private:
 		bool isLeaf = false;
+
+		// Reading data fields
+		std::vector<Token> tokens;
+		int tokenPos = 0;
+		Token consume();
+		Token consume(TokenType type);
+		TokenType nextTokenType();
+		int readFromTokens(std::vector<Token> tokens, int pos);
 
 		// Leaf data fields
 		std::shared_ptr<void> data;
