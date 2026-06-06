@@ -127,4 +127,18 @@ namespace TehJSON
 
 		return tokenPos;
 	}
+	
+	// Serializers for basic types
+	template <> std::string TehJSON::JSON::serializeData<int>(std::shared_ptr<void> data)
+	{
+		return std::to_string(*static_cast<int*>(data.get()));
+	}
+	template <> std::string TehJSON::JSON::serializeData<float>(std::shared_ptr<void> data)
+	{
+		return std::to_string(*static_cast<float*>(data.get()));
+	}
+	template <> std::string TehJSON::JSON::serializeData<std::string>(std::shared_ptr<void> data)
+	{
+		return '"' + *static_cast<std::string*>(data.get()) + '"';
+	}
 }
