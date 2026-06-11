@@ -2,7 +2,6 @@
 #include "tokenizer.h"
 
 #include <cstddef>
-#include <iostream>
 #include <stdexcept>
 #include <string>
 
@@ -98,13 +97,13 @@ namespace TehJSON
 		tokenizer.appendInput(s);
 		std::vector<Token> stringTokens = tokenizer.tokenize();
 
-		readFromTokens(stringTokens, 0);
+		readFromTokens(stringTokens);
 	}
 
-	int JSON::readFromTokens(std::vector<Token> tokens, int pos)
+	void JSON::readFromTokens(std::vector<Token> tokens)
 	{
 		this->tokens = tokens;
-		tokenPos = pos;
+		tokenPos = 0;
 		
 		consume(TokenType::LBrace);
 		while(nextTokenType() != TokenType::RBrace)
@@ -114,31 +113,61 @@ namespace TehJSON
 			consume(TokenType::Colon);
 			switch(nextTokenType())
 			{
-			case TokenType::LBrace: tokenPos = children[childName.content].readFromTokens(tokens, tokenPos); break;
+			case TokenType::LBrace:
+			{
+				std::vector<Token> childTokens;
+				while(nextTokenType() != TokenType::RBrace)
+				{
+					childTokens.push_back(consume());
+				}
+				childTokens.push_back(consume(TokenType::RBrace));
+				children[childName.content].readFromTokens(childTokens);
+				break;
+			}
 			case TokenType::StringLit: children[childName.content].set<std::string>(consume(TokenType::StringLit).content); break;
 			case TokenType::IntLit: children[childName.content].set<int>(std::stoi(consume(TokenType::IntLit).content)); break;
 			case TokenType::FloatLit: children[childName.content].set<float>(std::stof(consume(TokenType::FloatLit).content)); break;
+			case TokenType::LSquare:
+			{
+				consume(TokenType::LSquare);
+				std::vector<int> vec;
+				while(nextTokenType() != TokenType::RSquare)
+				{
+					if(nextTokenType() != TokenType::IntLit)
+						throw std::runtime_error("Only int arrays are supported so far");
+					vec.push_back(std::stoi(consume(TokenType::IntLit).content));
+					if(nextTokenType() == TokenType::Comma)
+					{
+						consume(TokenType::Comma);
+					}
+				}
+				consume(TokenType::RSquare);
+				children[childName.content].set<int>(vec);
+				break;
+			};
 			default: throw std::runtime_error("Token type is not a literal!");
 			}
 			if(nextTokenType() != TokenType::RBrace)
 				consume(TokenType::Comma);
 		}
 		consume(TokenType::RBrace);
-
-		return tokenPos;
 	}
 	
 	// Serializers for basic types
-	template <> std::string TehJSON::JSON::serializeData<int>(std::shared_ptr<void> data)
+	template <> std::string TehJSON::JSON::serializeData<int>(int *data)
 	{
-		return std::to_string(*static_cast<int*>(data.get()));
+		return std::to_string(*data);
 	}
-	template <> std::string TehJSON::JSON::serializeData<float>(std::shared_ptr<void> data)
+	template <> std::string TehJSON::JSON::serializeData<float>(float *data)
 	{
-		return std::to_string(*static_cast<float*>(data.get()));
+		return std::to_string(*data);
 	}
-	template <> std::string TehJSON::JSON::serializeData<std::string>(std::shared_ptr<void> data)
+	template <> std::string TehJSON::JSON::serializeData<std::string>(std::string *data)
 	{
-		return '"' + *static_cast<std::string*>(data.get()) + '"';
+		return '"' + *data + '"';
+	}
+	template <> std::string TehJSON::JSON::serializeData<bool>(bool *data)
+	{
+		return (*data)?"true":"false";
 	}
 }

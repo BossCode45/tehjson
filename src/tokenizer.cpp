@@ -9,6 +9,8 @@ namespace TehJSON
 		{
 		case TokenType::LBrace: return "LBrace";
 		case TokenType::RBrace: return "RBrace";
+		case TokenType::LSquare: return "LSquare";
+		case TokenType::RSquare: return "RSquare";
 		case TokenType::Colon: return "Colon";
 		case TokenType::Comma: return "Comma";
 		case TokenType::StringLit: return "StringLit";
@@ -78,6 +80,8 @@ namespace TehJSON
 			}
 			case '{': tokens.push_back({TokenType::LBrace, std::string{c}}); break;
 			case '}': tokens.push_back({TokenType::RBrace, std::string{c}}); break;
+			case '[': tokens.push_back({TokenType::LSquare, std::string{c}}); break;
+			case ']': tokens.push_back({TokenType::RSquare, std::string{c}}); break;
 			case ':': tokens.push_back({TokenType::Colon, std::string{c}}); break;
 			case ',': tokens.push_back({TokenType::Comma, std::string{c}}); break;
 			default: throw std::runtime_error("Unexpected character: '" + std::string{c} + "'");

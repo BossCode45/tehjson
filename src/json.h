@@ -28,10 +28,14 @@ namespace TehJSON
 		template <typename T>
 		T& get();
 		template <typename T>
+		void set(std::vector<T> value);
+		template <typename T>
 		void set(T value);
 		std::string leafType();
 		template <typename T>
-		static std::string serializeData(std::shared_ptr<void> data);
+		static std::string serializeData(std::vector<T> *data);
+		template <typename T>
+		static std::string serializeData(T *data);
 
 		// Non leaf methods
 		JSON& operator[](std::string name);
@@ -46,7 +50,7 @@ namespace TehJSON
 		Token consume();
 		Token consume(TokenType type);
 		TokenType nextTokenType();
-		int readFromTokens(std::vector<Token> tokens, int pos);
+		void readFromTokens(std::vector<Token> tokens);
 
 		// Leaf data fields
 		std::shared_ptr<void> data;

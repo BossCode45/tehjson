@@ -9,11 +9,14 @@ namespace TehJSON
 	{
 		LBrace,
 		RBrace,
+		LSquare,
+		RSquare,
 		Colon,
 		Comma,
 		StringLit,
 		IntLit,
 		FloatLit,
+		BoolLit,
 	};
 
 	std::string getTokenName(TokenType t);
