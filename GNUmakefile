@@ -40,7 +40,7 @@ $(INCLUDE_DIR)/%.hpp: $(SOURCE_DIR)/%.hpp lib
 	cp $< $@
 
 # Test binary
-$(TEST): $(TEST_OBJS) $(LIB)
+$(TEST): $(LIB) $(TEST_OBJS)
 	$(CXX) $(TEST_OBJS) $(TEST_CXXFLAGS) $(TEST_LINKFLAGS) -o $(TEST)
 
 $(OBJS_DIR)/%.o: $(TEST_SRC_DIR)/%.cpp $(TEST_SOURCE) $(TEST_HEADERS)
@@ -50,6 +50,7 @@ $(OBJS_DIR)/%.o: $(TEST_SRC_DIR)/%.cpp $(TEST_SOURCE) $(TEST_HEADERS)
 # Phony
 .PHONY: clean test
 clean:
+	rm -f $(INCLUDE_DIR)/*
 	rm -f $(LIB)
 	rm -f $(OBJS_DIR)/*.o
 	rm -f $(TEST)
