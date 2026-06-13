@@ -127,6 +127,7 @@ namespace TehJSON
 			case TokenType::StringLit: children[childName.content].set<std::string>(consume(TokenType::StringLit).content); break;
 			case TokenType::IntLit: children[childName.content].set<int>(std::stoi(consume(TokenType::IntLit).content)); break;
 			case TokenType::FloatLit: children[childName.content].set<float>(std::stof(consume(TokenType::FloatLit).content)); break;
+			case TokenType::BoolLit: children[childName.content].set<bool>(consume(TokenType::BoolLit).content == "true"); break;
 			case TokenType::LSquare:
 			{
 				consume(TokenType::LSquare);

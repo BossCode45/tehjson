@@ -16,8 +16,8 @@ int main()
 	jsonWriter["test_float"].set<float>(51.8);
 	jsonWriter["test_vecs"]["int"].set<int>({1, 2, 3});
 	// jsonWriter["test_vecs"]["float"].set<float>({0.1, 0.2, 0.3});
-	// jsonWriter["test_true"].set(true);
-	// jsonWriter["test_false"].set(false);
+	jsonWriter["test_true"].set(true);
+	jsonWriter["test_false"].set(false);
 	jsonWriter["test_object"]["test_int"].set<int>(100);
 	jsonWriter["test_object"]["test_float"].set<float>(100);
 

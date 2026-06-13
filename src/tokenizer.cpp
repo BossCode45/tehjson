@@ -1,4 +1,5 @@
 #include "tokenizer.h"
+#include <iostream>
 #include <stdexcept>
 
 namespace TehJSON
@@ -16,6 +17,7 @@ namespace TehJSON
 		case TokenType::StringLit: return "StringLit";
 		case TokenType::IntLit: return "IntLit";
 		case TokenType::FloatLit: return "FloatLit";
+		case TokenType::BoolLit: return "BoolLit";
 		}
 	}
 	
@@ -55,6 +57,7 @@ namespace TehJSON
 				tokens.push_back({TokenType::StringLit, literalContent});
 				break;
 			}
+			case '-':
 			case '0' ... '9': {
 				std::string literalContent{c};
 				pos++;
@@ -76,6 +79,29 @@ namespace TehJSON
 				}
 				pos--;
 				tokens.push_back({isInt?TokenType::IntLit:TokenType::FloatLit, literalContent});
+				break;
+			}
+			case 't':
+			{
+				if(input.at(++pos) != 'r'||
+				   input.at(++pos) != 'u'||
+				   input.at(++pos) != 'e')
+				{
+					throw std::runtime_error("Was expecting 'true' but got something else");
+				}
+				tokens.push_back({TokenType::BoolLit, "true"});
+				break;
+			}
+			case 'f':
+			{
+				if(input.at(++pos) != 'a'||
+				   input.at(++pos) != 'l'||
+				   input.at(++pos) != 's'||
+				   input.at(++pos) != 'e')
+				{
+					throw std::runtime_error("Was expecting 'false' but got something else");
+				}
+				tokens.push_back({TokenType::BoolLit, "false"});
 				break;
 			}
 			case '{': tokens.push_back({TokenType::LBrace, std::string{c}}); break;

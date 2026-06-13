@@ -7,16 +7,16 @@ namespace TehJSON
 {
 	enum struct TokenType
 	{
-		LBrace,
-		RBrace,
-		LSquare,
-		RSquare,
-		Colon,
-		Comma,
-		StringLit,
-		IntLit,
-		FloatLit,
-		BoolLit,
+		LBrace, 	// {
+		RBrace,		// }
+		LSquare,	// [
+		RSquare,	// ]
+		Colon,		// :
+		Comma,		// ,
+		StringLit,	// ".+"
+		IntLit,		// -?[0-9]+
+		FloatLit,	// -?[0-9]+.[0-9]+
+		BoolLit,	// true|false
 	};
 
 	std::string getTokenName(TokenType t);
